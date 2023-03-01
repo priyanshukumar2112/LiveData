@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.rare.livedata.databinding.ActivityMainBinding
 import com.rare.livedata.databinding.FragmentEndBinding
 
@@ -24,10 +25,14 @@ class EndFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var passViewModel: PassViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mainActivity = activity as MainActivity
         super.onCreate(savedInstanceState)
+        passViewModel = ViewModelProvider(mainActivity)[PassViewModel::class.java]
+
+        passViewModel.personName.value = 3
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)

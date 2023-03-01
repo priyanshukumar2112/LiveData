@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.rare.livedata.databinding.FragmentStartBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -20,13 +23,19 @@ private const val ARG_PARAM2 = "param2"
 class StartFragment : Fragment() {
     lateinit var binding: FragmentStartBinding
     lateinit var mainActivity: MainActivity
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var passViewModel: PassViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mainActivity = activity as MainActivity
         super.onCreate(savedInstanceState)
+
+        passViewModel = ViewModelProvider(mainActivity)[PassViewModel::class.java]
+
+        passViewModel.personName.observe(mainActivity){
+            Toast.makeText(mainActivity, "in pass $it", Toast.LENGTH_SHORT).show()
+        }
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
