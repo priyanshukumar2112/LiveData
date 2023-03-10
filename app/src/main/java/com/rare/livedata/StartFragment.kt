@@ -1,15 +1,12 @@
 package com.rare.livedata
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.Fragment
 import com.rare.livedata.databinding.FragmentStartBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -27,23 +24,15 @@ class StartFragment : Fragment() {
     lateinit var mainActivity: MainActivity
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var passViewModel: PassViewModel
+    lateinit var arrayAdapter: ArrayAdapter<String>
+    var list = arrayListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mainActivity = activity as MainActivity
         super.onCreate(savedInstanceState)
-
-
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
-        }
-
-        passViewModel = ViewModelProvider(mainActivity)[PassViewModel::class.java]
-        
-        
-        passViewModel.personName.observe(mainActivity){
-            Toast.makeText(mainActivity, "in pass $it", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -54,19 +43,25 @@ class StartFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentStartBinding.inflate(layoutInflater)
 
-
-
-        val arrayAdapter : ArrayAdapter<String>
-        val list = arrayOf("Blue Badgers", "Cheetah Colonels", "Phantom Bulls"," Crashing Amigos",
-                "Bengal Bisons","Dashing Devils","Dazzling Balls","Flying Squirrels",
-            "Crew X","Rule Breakers","The Squad")
-
-        arrayAdapter = ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1, list)
+        arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
         binding.lv1.adapter = arrayAdapter
 
-
+        binding.lv1.setOnItemClickListener { adapterView, view, i, l ->
+            var selected = binding.lv1.adapter.getItem(i) as String
+            mainActivity.passViewModel.selectedValue.setValue(selected)
+        }
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mainActivity.passViewModel.personName.observe(requireActivity()) {
+            System.out.println("in listener")
+            list.addAll(it)
+            arrayAdapter.notifyDataSetChanged()
+            Toast.makeText(mainActivity, "in pass $it", Toast.LENGTH_SHORT).show()
+        }
     }
 
     companion object {

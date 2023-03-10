@@ -7,9 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
-import com.rare.livedata.databinding.ActivityMainBinding
 import com.rare.livedata.databinding.FragmentEndBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -23,20 +20,25 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class EndFragment : Fragment() {
+
+    val list = arrayOf<String>()
+
     lateinit var binding: FragmentEndBinding
     lateinit var mainActivity : MainActivity
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var passViewModel: PassViewModel
+   lateinit var arrayAdapter : ArrayAdapter<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mainActivity = activity as MainActivity
         super.onCreate(savedInstanceState)
-        passViewModel = ViewModelProvider(mainActivity)[PassViewModel::class.java]
 
-       passViewModel.personName.value = 3
+     //  passViewModel.personName.value = 3
+       /* mainActivity.passViewModel.personName.observe(mainActivity){
 
+        }
+*/
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -49,11 +51,11 @@ class EndFragment : Fragment() {
     ): View? {
 
        binding= FragmentEndBinding.inflate(layoutInflater)
-        val arrayAdapter : ArrayAdapter<String>
-        val list = arrayOf("")
-
         arrayAdapter = ArrayAdapter(requireContext(), R.layout.simple_list_item_1, list)
+       // list.set(passViewModel.passdata()
+
         binding.lv2.adapter = arrayAdapter
+
         return binding.root
     }
 
