@@ -1,10 +1,13 @@
 package com.rare.livedata
 
+import android.R
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.rare.livedata.databinding.ActivityMainBinding
 import com.rare.livedata.databinding.FragmentEndBinding
@@ -32,7 +35,8 @@ class EndFragment : Fragment() {
         super.onCreate(savedInstanceState)
         passViewModel = ViewModelProvider(mainActivity)[PassViewModel::class.java]
 
-        passViewModel.personName.value = 3
+       passViewModel.personName.value = 3
+
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -45,6 +49,11 @@ class EndFragment : Fragment() {
     ): View? {
 
        binding= FragmentEndBinding.inflate(layoutInflater)
+        val arrayAdapter : ArrayAdapter<String>
+        val list = arrayOf("")
+
+        arrayAdapter = ArrayAdapter(requireContext(), R.layout.simple_list_item_1, list)
+        binding.lv2.adapter = arrayAdapter
         return binding.root
     }
 
